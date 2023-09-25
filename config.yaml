@@ -1,0 +1,36 @@
+
+---
+
+- hosts: all
+  become: true
+  gather_facts: yes
+  tasks:
+
+    - name: install python3 and pip3
+      package:
+      name:
+        - "{{ python_package }}"
+        - "{{ pip_package }} " 
+
+        state: latest
+
+    - name: Set pip3  as the default pip in Ubuntu
+      command: " ln -sf /usr/bin/pip3 /usr/bin/pip"
+      when: ansible_distribution == 'Ubuntu'
+   
+    - name: Set pip3  as the default pip in CentOS
+      command: " ln -sf /usr/bin/pip3 /usr/bin/pip"
+      when: ansible_distribution == 'CentOS'
+
+    - name: Set pip3  as the default python3 in Ubuntu
+      command: " ln -sf /usr/bin/python3 /usr/bin/python"
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Set pip3  as the default python3 in CentOS
+      command: " ln -sf /usr/bin/python3 /usr/bin/python"
+      when: ansible_distribution == 'CentOS'
+
+    - name: Install OpenJDK
+      apt:
+        name: openjdk-11-jdk
+        state: present
